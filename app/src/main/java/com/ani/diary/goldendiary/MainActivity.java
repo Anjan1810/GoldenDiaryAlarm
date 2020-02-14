@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private final int REQ_CODE = 100;
     TextView textView;
     PendingIntent pendingIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -65,44 +68,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-   public void onStart(View view){
+    public void onStart(View view) {
 
-       EditText edhr=(EditText)findViewById(R.id.ed_hr);
-       EditText edmin=(EditText)findViewById(R.id.ed_min);
-       EditText edsec=(EditText)findViewById(R.id.ed_sec);
-       TextView textView=(TextView)findViewById(R.id.text);
-       YourPreference yourPreference = YourPreference.getInstance(MainActivity.this);
-       yourPreference.saveDataString("ALARMTEXT",textView.getText().toString());
+        EditText edhr = (EditText) findViewById(R.id.ed_hr);
+        EditText edmin = (EditText) findViewById(R.id.ed_min);
+        EditText edsec = (EditText) findViewById(R.id.ed_sec);
+        TextView textView = (TextView) findViewById(R.id.text);
+        YourPreference yourPreference = YourPreference.getInstance(MainActivity.this);
+        yourPreference.saveDataString("ALARMTEXT", textView.getText().toString());
 
-       String strhr=edhr.getText().toString();
-       int ihr=Integer.valueOf(strhr);
-       String strmin=edmin.getText().toString();
-       int imin=Integer.valueOf(strmin);
-       String strsec=edsec.getText().toString();
-       int isec=Integer.valueOf(strsec);
+        String strhr = edhr.getText().toString();
+        int ihr = Integer.valueOf(strhr);
+        String strmin = edmin.getText().toString();
+        int imin = Integer.valueOf(strmin);
+        String strsec = edsec.getText().toString();
+        int isec = Integer.valueOf(strsec);
 
-       //Testing commit 
+        //Testing commit
+        int x = 10;
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Date dat = new Date();
+        Calendar cal_alarm = Calendar.getInstance();
+        Calendar cal_now = Calendar.getInstance();
+        cal_now.setTime(dat);
+        cal_alarm.setTime(dat);
+        cal_alarm.set(Calendar.HOUR_OF_DAY, ihr);
+        cal_alarm.set(Calendar.MINUTE, imin);
+        cal_alarm.set(Calendar.SECOND, isec);
+        if (cal_alarm.before(cal_now)) {
+            cal_alarm.add(Calendar.DATE, 1);
+        }
 
-       AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-       Date dat = new Date();
-       Calendar cal_alarm = Calendar.getInstance();
-       Calendar cal_now = Calendar.getInstance();
-       cal_now.setTime(dat);
-       cal_alarm.setTime(dat);
-       cal_alarm.set(Calendar.HOUR_OF_DAY,ihr);
-       cal_alarm.set(Calendar.MINUTE,imin);
-       cal_alarm.set(Calendar.SECOND,isec);
-       if(cal_alarm.before(cal_now)){
-           cal_alarm.add(Calendar.DATE,1);
-       }
+        Intent myIntent = new Intent(this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
 
-       Intent myIntent = new Intent(this, AlarmReceiver.class);
-       pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-
-       manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,cal_alarm.getTimeInMillis(),1000, pendingIntent);
-   }
-
-
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal_alarm.getTimeInMillis(), 1000, pendingIntent);
+    }
 
 
     public void start() {
@@ -112,15 +113,15 @@ public class MainActivity extends AppCompatActivity {
         Calendar cal_now = Calendar.getInstance();
         cal_now.setTime(dat);
         cal_alarm.setTime(dat);
-        cal_alarm.set(Calendar.HOUR_OF_DAY,15);
-        cal_alarm.set(Calendar.MINUTE,20);
-        cal_alarm.set(Calendar.SECOND,0);
-        if(cal_alarm.before(cal_now)){
-            cal_alarm.add(Calendar.DATE,1);
+        cal_alarm.set(Calendar.HOUR_OF_DAY, 15);
+        cal_alarm.set(Calendar.MINUTE, 20);
+        cal_alarm.set(Calendar.SECOND, 0);
+        if (cal_alarm.before(cal_now)) {
+            cal_alarm.add(Calendar.DATE, 1);
         }
 
         Intent myIntent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,cal_alarm.getTimeInMillis(),1000, pendingIntent);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal_alarm.getTimeInMillis(), 1000, pendingIntent);
     }
 }
