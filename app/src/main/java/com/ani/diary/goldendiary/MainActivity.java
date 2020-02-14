@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
        String strsec=edsec.getText().toString();
        int isec=Integer.valueOf(strsec);
 
+       //Testing commit 
+
        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
        Date dat = new Date();
        Calendar cal_alarm = Calendar.getInstance();
